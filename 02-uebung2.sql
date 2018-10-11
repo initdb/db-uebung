@@ -53,14 +53,14 @@ insert into Dozenten(Name, Buero, Tel) values
 
 insert into Veranstaltungen(Name, Semester, Raum, Dozent) values
 	('Programmieren 15','4','B0.14','Schmidt'),
-	('Bauelemente','1','R0.05','Ferrit'),
+	('Hochschulsport','1','R0.05','Ferrit'),
 	('Mathematik 1','2','B0.03','Heftig');
 
 insert into Student_in_Veranstaltung(Student, Veranstaltung, Semester, Note) values
 	('1252','Programmieren 15','4','3.3'),
 	('4356','Mathematik 1','2','2.3'),
 	('4567','Programmieren 15','4','1.0'),
-	('6969','Bauelemente','1','5.0');
+	('6969','Hochschulsport','1','5.0');
 
 select * from Studenten;
 select * from Dozenten;
