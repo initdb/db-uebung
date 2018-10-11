@@ -1,9 +1,9 @@
- /*******************************************************/
- /* set up												*/
- /*******************************************************/
+/********************************************************/
+/* set up tables										*/
+/********************************************************/
 
- create table Studenten
- (
+create table Studenten
+(
 	Name varchar(30),
 	Matrikel DECIMAL(4,0) primary key,
 );
@@ -39,12 +39,12 @@ create table Student_in_Veranstaltung
 );
 
 /********************************************************/
-/* main													*/
+/* fill with data										*/
 /********************************************************/
 select * from Student_in_Veranstaltung;
 
 /********************************************************/
-/* tear down											*/
+/* tear down tables										*/
 /********************************************************/
 drop table Student_in_Veranstaltung;
 drop table Veranstaltungen;
