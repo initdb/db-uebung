@@ -33,7 +33,7 @@ create table Student_in_Veranstaltung
 	Semester char(4),
     foreign key(Veranstaltung, Semester) references Veranstaltungen(Name, Semester),
 	Note decimal(2,1),
-	constraint gueltige_note check(Note < 6 and Note >= 1),
+	constraint gueltige_note check(Note <= 5 and Note >= 1),
 	primary key(Student, Veranstaltung, Semester)
 );
 
