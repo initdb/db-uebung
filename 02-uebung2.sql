@@ -37,14 +37,17 @@ create table Student_in_Veranstaltung
 	primary key(Student, Veranstaltung, Semester)
 );
 
+alter table Studenten add Geburtstag date;
+alter table Studenten alter column Geburtstag date not null;
+
 /********************************************************/
 /* fill with data										*/
 /********************************************************/
-insert into Studenten(Name, Matrikel) values
-	('Klaus','1252'),
-	('Maria','4356'),
-	('Johanna','4567'),
-	('Meemet','6969');
+insert into Studenten(Name, Matrikel, Geburtstag) values
+	('Klaus','1252','19.10.1990'),
+	('Maria','4356','11.09.1993'),
+	('Johanna','4567','01.05.1996'),
+	('Meemet','6969','27.12.1995');
 
 insert into Dozenten(Name, Buero, Tel) values
 	('Schmidt','A0.01','0800902'),
