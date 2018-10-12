@@ -37,6 +37,9 @@ create table STUDENTEN_IN_VERANSTALTUNG
 	primary key(Student, Veranstaltung, Semester)
 );
 
+/********************************************************/
+/* alter table											*/
+/********************************************************/
 alter table STUDENTEN add Geburtstag date;
 alter table STUDENTEN alter column Geburtstag date not null;
 
