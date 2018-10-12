@@ -58,15 +58,15 @@ insert into DOZENTEN(Name, Buero, Tel) values
 	('Heftig','A0.07','10001000');
 
 insert into VERANSTALTUNGEN(Name, Semester, Raum, Dozent) values
-	('Programmieren 15','4','B0.14','Schmidt'),
-	('Hochschulsport','1','R0.05','Ferrit'),
-	('Mathematik 1','2','B0.03','Heftig');
+	('Programmieren 15','ws18','B0.14','Schmidt'),
+	('Hochschulsport','ss18','R0.05','Ferrit'),
+	('Mathematik 1','ss18','B0.03','Heftig');
 
 insert into STUDENTEN_IN_VERANSTALTUNG(Student, Veranstaltung, Semester, Note) values
-	('1252','Programmieren 15','4','3.3'),
-	('4356','Mathematik 1','2','2.3'),
-	('4567','Programmieren 15','4','1.0'),
-	('6969','Hochschulsport','1','5.0');
+	('1252','Programmieren 15','ws18','3.3'),
+	('4356','Mathematik 1','ss18','2.3'),
+	('4567','Programmieren 15','ws18','1.0'),
+	('6969','Hochschulsport','ss18','5.0');
 
 select * from STUDENTEN;
 select * from DOZENTEN;
