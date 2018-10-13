@@ -83,10 +83,10 @@ insert into DOZENTEN(Name, Buero, Tel) values
 	('Maria','D120',null);
 
 insert into VERANSTALTUNGEN(Name, Semester, Raum, Dozent) values
-	('Drachenfliegen','ss17','Strand'),
-	('Drachenfliegen','ss18','Strand'),
-	('Beachvollyball','ss17','Strand'),
-	('Beachvollyball','ss18','Strand');
+	('Drachenfliegen','ss17','Strand','Maria'),
+	('Drachenfliegen','ss18','Strand','Maria'),
+	('Beachvollyball','ss17','Strand','Maria'),
+	('Beachvollyball','ss18','Strand','Maria');
 
 insert into STUDENTEN(Name, Matrikel, Geburtstag) values
 	('Eva','3333','01.03.1990'),
@@ -109,7 +109,7 @@ insert into STUDENTEN_IN_VERANSTALTUNG(Student, Veranstaltung, Semester, Note) v
 	('3334','Beachvollyball','ss17',null),
 	('3335','Beachvollyball','ss17',null);
 
-update STUDENTEN_IN_VERANSTALTUNG  set Note = '4.0';
+update STUDENTEN_IN_VERANSTALTUNG  set Note = '4.0' where Veranstaltung = 'Beachvollyball';
 update DOZENTEN set Buero = 'D22' where Name = 'Maria';
 
 /********************************************************/
