@@ -1,5 +1,5 @@
 /********************************************************/
-/* set up tables										*/
+/* set up tables 2.2									*/
 /********************************************************/
 
 create table STUDENTEN
@@ -38,13 +38,13 @@ create table STUDENTEN_IN_VERANSTALTUNG
 );
 
 /********************************************************/
-/* alter table											*/
+/* alter table 2.3										*/
 /********************************************************/
 alter table STUDENTEN add Geburtstag date;
 alter table STUDENTEN alter column Geburtstag date not null;
 
 /********************************************************/
-/* fill with data										*/
+/* fill with data (own)									*/
 /********************************************************/
 insert into STUDENTEN(Name, Matrikel, Geburtstag) values
 	('Klaus','1252','19.10.1990'),
@@ -68,6 +68,53 @@ insert into STUDENTEN_IN_VERANSTALTUNG(Student, Veranstaltung, Semester, Note) v
 	('4567','Programmieren 15','ws18','1.0'),
 	('6969','Hochschulsport','ss18','5.0');
 
+/********************************************************/
+/* fill with data 2.4									*/
+/********************************************************/
+insert into DOZENTEN(Name, Buero, Tel) values
+	('Klaus','C201','123');
+
+insert into VERANSTALTUNGEN(Name, Semester, Raum, Dozent) values
+	('Tanzgymnastik','ws17','D111','Klaus'),
+	('Tanzgymnastik','ss18','D111','Klaus'),
+	('Tanzgymnastik','ws18',null,'Klaus');
+
+insert into DOZENTEN(Name, Buero, Tel) values
+	('Maria','D120',null);
+
+insert into VERANSTALTUNGEN(Name, Semester, Raum, Dozent) values
+	('Drachenfliegen','ss17','Strand'),
+	('Drachenfliegen','ss18','Strand'),
+	('Beachvollyball','ss17','Strand'),
+	('Beachvollyball','ss18','Strand');
+
+insert into STUDENTEN(Name, Matrikel, Geburtstag) values
+	('Eva','3333','01.03.1990'),
+	('Luise','3334','01.04.1990'),
+	('Daniel','3335','01.05.1990'),
+	('Dominik','3336','01.06.1990');
+
+insert into STUDENTEN_IN_VERANSTALTUNG(Student, Veranstaltung, Semester, Note) values
+	('3333','Beachvollyball','ss18',null),
+	('3334','Beachvollyball','ss18',null),
+	('3335','Beachvollyball','ss18',null);
+
+insert into STUDENTEN_IN_VERANSTALTUNG(Student, Veranstaltung, Semester, Note) values
+	('3333','Drachenfliegen','ss17',null),
+	('3336','Drachenfliegen','ss17',null);
+
+insert into STUDENTEN_IN_VERANSTALTUNG(Student, Veranstaltung, Semester, Note) values
+	('3334','Tanzgymnastik','ws17',null),
+	('3335','Tanzgymnastik','ws17',null),
+	('3334','Beachvollyball','ss17',null),
+	('3335','Beachvollyball','ss17',null);
+
+update STUDENTEN_IN_VERANSTALTUNG  set Note = '4.0';
+update DOZENTEN set Buero = 'D22' where Name = 'Maria';
+
+/********************************************************/
+/* show tables											*/
+/********************************************************/
 select * from STUDENTEN;
 select * from DOZENTEN;
 select * from VERANSTALTUNGEN;
