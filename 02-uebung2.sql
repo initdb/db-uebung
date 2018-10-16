@@ -150,13 +150,22 @@ where VERA.Semester = 'ss18'
 
 select STUD1.Name, STUD2.Name as 'ist älter als'
 from STUD as STUD1, STUD as STUD2 
-where STUD1.Geburtstag <= any (
+where STUD1.Geburtstag < any (
 	select STUD2.Geburtstag
 	from STUD
-	) and STUD1.Geburtstag < STUD2.Geburtstag
+	)
 order by STUD1.Geburtstag
 
-
+select
+	concat(STUD.Name, ' hat im ', STUD_IN_VERA.Semester,
+	' an der Veranstaltung ', STUD_IN_VERA.Veranstaltung,
+	' teilgenommen und die Note ', STUD_IN_VERA.Note,
+	' erhalten. Herzlichen Glückwunsch! ')  as 'Text'
+from STUD_IN_VERA join STUD on STUD_IN_VERA.Student=STUD.Matrikel
+where STUD_IN_VERA.Note >= 4.0
+	and (STUD_IN_VERA.Semester = 'ws17'
+	or STUD_IN_VERA.Semester = 'ss17'
+	or STUD_IN_VERA.Semester = 'ss18')
 
 /********************************************************/
 /* tear down tables										*/
