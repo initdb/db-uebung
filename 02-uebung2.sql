@@ -122,22 +122,32 @@ select * from VERA;
 select * from STUD_IN_VERA;
 
 /********************************************************/
-/* 3.1.3 tables											*/
+/* 3.1 show tables										*/
 /********************************************************/
 
 select DOZE.Name
-	from DOZE
-	where DOZE.Buero like 'D%'
+from DOZE
+where DOZE.Buero like 'D%'
 
 select STUD_IN_VERA.Student
-	from STUD_IN_VERA
-	where STUD_IN_VERA.Note is null 
-		and STUD_IN_VERA.Semester like 'ss18'
+from STUD_IN_VERA
+where STUD_IN_VERA.Note is null 
+	and STUD_IN_VERA.Semester like 'ss18'
 
 select STUD.Matrikel, datediff(year, STUD.Geburtstag, getdate()) as 'Alter'
-	from STUD
-	where datediff(year, STUD.Geburtstag, getdate()) > 20
-	and datediff(year, STUD.Geburtstag, getdate()) < 40
+from STUD
+where datediff(year, STUD.Geburtstag, getdate()) > 20
+and datediff(year, STUD.Geburtstag, getdate()) < 40
+
+/********************************************************/
+/* 3.2 show tables										*/
+/********************************************************/
+
+select STUD_IN_VERA.Student, STUD_IN_VERA.Veranstaltung, VERA.Raum
+from STUD_IN_VERA join VERA on STUD_IN_VERA.Veranstaltung = VERA.Name
+where VERA.Semester = 'ss18'
+and STUD_IN_VERA.Semester = 'ss18'
+
 
 /********************************************************/
 /* tear down tables										*/
