@@ -6,6 +6,7 @@ create table STUD
 (
 	Name varchar(30),
 	Matrikel decimal(4,0) primary key,
+	constraint matrikel_nicht_negativ check (Matrikel > 0)
 );
 
 create table DOZE
@@ -40,8 +41,8 @@ create table STUD_IN_VERA
 /********************************************************/
 /* alter table 2.3										*/
 /********************************************************/
-alter table STUDENTEN add Geburtstag date;
-alter table STUDENTEN alter column Geburtstag date not null;
+alter table STUD add Geburtstag date;
+alter table STUD alter column Geburtstag date not null;
 
 /********************************************************/
 /* fill with data (own)									*/
@@ -124,20 +125,25 @@ select * from STUD_IN_VERA;
 /* show tables											*/
 /********************************************************/
 
-select DOZENTEN.Name
-	from DOZENTEN
-	where DOZENTEN.Buero like 'D%'
+select DOZE.Name
+	from DOZE
+	where DOZE.Buero like 'D%'
 
-select STUDENTEN_IN_VERANSTALTUNG.Student
-	from STUDENTEN_IN_VERANSTALTUNG
-	where STUDENTEN_IN_VERANSTALTUNG.Note is null
+select STUD_IN_VERA.Student
+	from STUD_IN_VERA
+	where STUD_IN_VERA.Note is null 
+		and STUD_IN_VERA.Semester like 'ss18'
 
-select STUDENTEN.Name
+declare @Alter int
+select STUD.Matrikel, datediff(year, STUD.Geburtstag, getdate()) as 'Alter'
+	from STUD
+	where datediff(year, STUD.Geburtstag, getdate()) > 20
+	and datediff(year, STUD.Geburtstag, getdate()) < 40
 
 /********************************************************/
 /* tear down tables										*/
 /********************************************************/
-drop table STUDENTEN_IN_VERANSTALTUNG;
-drop table VERANSTALTUNGEN;
-drop table DOZENTEN;
-drop table STUDENTEN;
+drop table STUD_IN_VERA;
+drop table VERA;
+drop table DOZE;
+drop table STUD;
