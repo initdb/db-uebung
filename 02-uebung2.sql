@@ -144,9 +144,18 @@ and datediff(year, STUD.Geburtstag, getdate()) < 40
 /********************************************************/
 
 select STUD_IN_VERA.Student, STUD_IN_VERA.Veranstaltung, VERA.Raum
-from STUD_IN_VERA join VERA on STUD_IN_VERA.Veranstaltung = VERA.Name
+from STUD_IN_VERA join VERA on STUD_IN_VERA.Veranstaltung = VERA.Name 
+	and VERA.Semester=STUD_IN_VERA.Semester
 where VERA.Semester = 'ss18'
-and STUD_IN_VERA.Semester = 'ss18'
+
+select STUD1.Name, STUD2.Name as 'ist älter als'
+from STUD as STUD1, STUD as STUD2 
+where STUD1.Geburtstag <= any (
+	select STUD2.Geburtstag
+	from STUD
+	) and STUD1.Geburtstag < STUD2.Geburtstag
+order by STUD1.Geburtstag
+
 
 
 /********************************************************/
