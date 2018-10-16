@@ -122,7 +122,7 @@ select * from VERA;
 select * from STUD_IN_VERA;
 
 /********************************************************/
-/* show tables											*/
+/* 3.1.3 tables											*/
 /********************************************************/
 
 select DOZE.Name
@@ -134,7 +134,6 @@ select STUD_IN_VERA.Student
 	where STUD_IN_VERA.Note is null 
 		and STUD_IN_VERA.Semester like 'ss18'
 
-declare @Alter int
 select STUD.Matrikel, datediff(year, STUD.Geburtstag, getdate()) as 'Alter'
 	from STUD
 	where datediff(year, STUD.Geburtstag, getdate()) > 20
