@@ -168,6 +168,26 @@ where STUD_IN_VERA.Note >= 4.0
 	or STUD_IN_VERA.Semester = 'ss18')
 
 /********************************************************/
+/* 3.3 show tables										*/
+/********************************************************/
+
+select distinct VERA.Dozent, VERA.Name, STUD_IN_VERA.Note
+from VERA join STUD_IN_VERA on STUD_IN_VERA.Veranstaltung=VERA.Name
+and STUD_IN_VERA.Semester=VERA.Semester
+where STUD_IN_VERA.Note < any (
+	select STUD_IN_VERA.Note
+	from STUD_IN_VERA
+	)
+
+select distinct VERA.Dozent, VERA.Name, STUD_IN_VERA.Note
+from VERA join STUD_IN_VERA on STUD_IN_VERA.Veranstaltung=VERA.Name
+and STUD_IN_VERA.Semester=VERA.Semester
+where STUD_IN_VERA.Note > any (
+	select STUD_IN_VERA.Note
+	from STUD_IN_VERA
+	)
+
+/********************************************************/
 /* tear down tables										*/
 /********************************************************/
 drop table STUD_IN_VERA;
