@@ -148,24 +148,42 @@ from STUD_IN_VERA join VERA on STUD_IN_VERA.Veranstaltung = VERA.Name
 	and VERA.Semester=STUD_IN_VERA.Semester
 where VERA.Semester = 'ss18'
 
-select STUD1.Name, STUD2.Name as 'ist älter als'
+select STUD1.Name, STUD2.Name as 'ist jünger als'
 from STUD as STUD1, STUD as STUD2 
-where STUD1.Geburtstag < any (
+where STUD1.Geburtstag > any (
 	select STUD2.Geburtstag
 	from STUD
 	)
 order by STUD1.Geburtstag
 
 select
-	concat(STUD.Name, ' hat im ', STUD_IN_VERA.Semester,
-	' an der Veranstaltung ', STUD_IN_VERA.Veranstaltung,
-	' teilgenommen und die Note ', STUD_IN_VERA.Note,
-	' erhalten. Herzlichen Glückwunsch! ')  as 'Text'
-from STUD_IN_VERA join STUD on STUD_IN_VERA.Student=STUD.Matrikel
-where STUD_IN_VERA.Note >= 4.0
-	and (STUD_IN_VERA.Semester = 'ws17'
-	or STUD_IN_VERA.Semester = 'ss17'
-	or STUD_IN_VERA.Semester = 'ss18')
+	concat(ERGEBNIS.Name, ' hat im ', ERGEBNIS.Semester,
+			' an der Veranstaltung ', ERGEBNIS.Veranstaltung,
+			' teilgenommen und')+
+	case
+		when ERGEBNIS.Note <= 4 then
+			concat(
+			' die Note ', ERGEBNIS.Note,
+			' erhalten. Herzlichen Glückwunsch! ')
+		when ERGEBNIS.Note > 4 then 
+			concat(' hat leider nicht bestanden (',ERGEBNIS.Note, ')') 
+		when ERGEBNIS.Note is null then
+			' hat noch keine Note erhalten.'
+	end as 'Text'
+from (	select
+			STUD.Name, STUD.Matrikel,
+			STUD_IN_VERA.Semester,
+			STUD_IN_VERA.Veranstaltung,
+			STUD_IN_VERA.Note
+		from STUD_IN_VERA join STUD 
+			on STUD_IN_VERA.Student=STUD.Matrikel
+	 ) as ERGEBNIS
+where 
+	(ERGEBNIS.Semester = 'ws17'
+	or ERGEBNIS.Semester = 'ss17'
+	or ERGEBNIS.Semester = 'ss18')
+
+select * from STUD join STUD_IN_VERA on STUD.Matrikel=STUD_IN_VERA.Student
 
 /********************************************************/
 /* 3.3 show tables										*/
