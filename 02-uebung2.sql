@@ -125,15 +125,18 @@ select * from STUD_IN_VERA;
 /* 3.1 show tables										*/
 /********************************************************/
 
+--1.
 select DOZE.Name
 from DOZE
 where DOZE.Buero like 'D%'
 
+--2.
 select STUD_IN_VERA.Student
 from STUD_IN_VERA
 where STUD_IN_VERA.Note is null 
 	and STUD_IN_VERA.Semester like 'ss18'
 
+--3.
 select STUD.Matrikel, datediff(year, STUD.Geburtstag, getdate()) as 'Alter'
 from STUD
 where datediff(year, STUD.Geburtstag, getdate()) > 20
@@ -143,11 +146,13 @@ and datediff(year, STUD.Geburtstag, getdate()) < 40
 /* 3.2 show tables										*/
 /********************************************************/
 
+--1.
 select STUD_IN_VERA.Student, STUD_IN_VERA.Veranstaltung, VERA.Raum
 from STUD_IN_VERA join VERA on STUD_IN_VERA.Veranstaltung = VERA.Name 
 	and VERA.Semester=STUD_IN_VERA.Semester
 where VERA.Semester = 'ss18'
 
+--2.
 select STUD1.Name, STUD2.Name as 'ist jünger als'
 from STUD as STUD1, STUD as STUD2 
 where STUD1.Geburtstag > any (
@@ -156,10 +161,11 @@ where STUD1.Geburtstag > any (
 	)
 order by STUD1.Geburtstag
 
+--3.
 select
 	concat(ERGEBNIS.Name, ' hat im ', ERGEBNIS.Semester,
 			' an der Veranstaltung ', ERGEBNIS.Veranstaltung,
-			' teilgenommen und')+
+			' teilgenommen und') +
 	case
 		when ERGEBNIS.Note <= 4 then
 			concat(
@@ -169,6 +175,8 @@ select
 			concat(' hat leider nicht bestanden (',ERGEBNIS.Note, ')') 
 		when ERGEBNIS.Note is null then
 			' hat noch keine Note erhalten.'
+		else
+			' etwas lief schief! Bitte später nochmals probieren.'
 	end as 'Text'
 from (	select
 			STUD.Name, STUD.Matrikel,
@@ -183,27 +191,24 @@ where
 	or ERGEBNIS.Semester = 'ss17'
 	or ERGEBNIS.Semester = 'ss18')
 
-select * from STUD join STUD_IN_VERA on STUD.Matrikel=STUD_IN_VERA.Student
-
 /********************************************************/
 /* 3.3 show tables										*/
 /********************************************************/
 
-select distinct VERA.Dozent, VERA.Name, STUD_IN_VERA.Note
-from VERA join STUD_IN_VERA on STUD_IN_VERA.Veranstaltung=VERA.Name
-and STUD_IN_VERA.Semester=VERA.Semester
-where STUD_IN_VERA.Note < any (
-	select STUD_IN_VERA.Note
-	from STUD_IN_VERA
-	)
-
-select distinct VERA.Dozent, VERA.Name, STUD_IN_VERA.Note
-from VERA join STUD_IN_VERA on STUD_IN_VERA.Veranstaltung=VERA.Name
-and STUD_IN_VERA.Semester=VERA.Semester
-where STUD_IN_VERA.Note > any (
-	select STUD_IN_VERA.Note
-	from STUD_IN_VERA
-	)
+select
+	DOZE_IN_VERA.Dozent,
+	min(DOZE_IN_VERA.Note) as 'Beste Note',
+	max(DOZE_IN_VERA.Note) as 'Schlechteste Note'
+from ( 
+	select
+		VERA.Dozent,STUD_IN_VERA.Note
+	from
+		VERA join STUD_IN_VERA
+		on STUD_IN_VERA.Veranstaltung=VERA.Name
+	) as DOZE_IN_VERA
+where
+	DOZE_IN_VERA.Note is not null
+group by DOZE_IN_VERA.Dozent
 
 /********************************************************/
 /* tear down tables										*/
