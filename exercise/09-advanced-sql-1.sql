@@ -176,20 +176,49 @@ where
 
 --Liste aller Studenten und zusätzlich Informtionen zur besuchten Veranstaltung
 select 
-	Student_in_Veranstaltung2.Student,
+	distinct Student_in_Veranstaltung2.Student,
 	Veranstaltungen2.*
 from
 	--linke Tabelle bleibt komplett erhalten
 	Student_in_Veranstaltung2 left join Veranstaltungen2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+order by Veranstaltungen2.Name
 
 --right join vriante der vorherigen Aufgabe
 select 
-	Student_in_Veranstaltung2.Student,
+	distinct Student_in_Veranstaltung2.Student,
 	Veranstaltungen2.*
 from
 	--linke Tabelle bleibt komplett erhalten
 	Veranstaltungen2 right join Student_in_Veranstaltung2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+order by Veranstaltungen2.Name
 
+/************************************************/
+/* Rekursion									*/	
+/************************************************/
+--Liste mit Name einer Person und Vorfahren
+--select 
+--	A.Name,
+--	P.Name as Ahne
+--from
+--	Ahnen2 as A join Ahnen2 as P on A.Vater = P.Name or A.Mutter = P.Name
+
+with Verwandschaft(Person, Ahne) as (
+	select
+		A.Name,
+		P.Name as Ahne
+	from
+		Ahnen2 as A join Ahnen2 as P on A.Vater = P.Name or A.Mutter = P.Name
+	
+		union all
+
+	select
+		V.Person, V.Ahne
+	from
+		Verwandschaft as V,Ahnen2 as A
+	where
+		V.Person = A.Mutter
+	)
+select distinct * from Verwandschaft
 /************************************************/
 /* de-init										*/	
 /************************************************/
