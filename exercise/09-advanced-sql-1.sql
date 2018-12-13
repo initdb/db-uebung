@@ -1,11 +1,15 @@
 --use Vorlesung_DB;
 
+
+/************************************************/
+/* create tables								*/	
+/************************************************/
 create table Studenten2(
 	Name varchar(30),
 	Matrikel decimal(4,0),
 	Geburtstag date,
 	primary key (Matrikel),
-	constraint matrikel_nicht_negativ check(Matrikel>=0)
+	constraint matrikel_nicht_negativ2 check(Matrikel>=0)
 );
 create table Dozenten2(
 	Name varchar(30),
@@ -28,10 +32,13 @@ create table Student_in_Veranstaltung2(
 	Note Decimal(2,1),
 	foreign key (Student) references Studenten2(Matrikel),
 	foreign key (Veranstaltung, Semester) references Veranstaltungen2(Name,Semester),
-	constraint schulnote check(Note >= 1 and Note<=5),
+	constraint schulnote2 check(Note >= 1 and Note<=5),
 	primary key (Student, Veranstaltung, Semester)
 );
 
+/************************************************/
+/* fill tables									*/	
+/************************************************/
 insert into Dozenten2 (Name, Tel, Buero) values ('Klaus', '123', 'C201');
 insert into Veranstaltungen2 (Dozent, Name, Raum, Semester) values 
 	('Klaus','Tanzgymnastik','D111','ss18'),
@@ -99,7 +106,46 @@ insert into Ahnen2 (Name, Vater, Mutter) values
 	('Josef','Jakob',null) ,
 	('Maria',null,null) ,
 	('Jesus','Josef','Maria');
-	
+
+/************************************************/
+/* Aggregatfunktionen							*/	
+/************************************************/
+--beste Note eines Dozenten zu jeder Veranstaltung
+select 
+	Student_in_Veranstaltung2.Veranstaltung,
+	Veranstaltungen2.Dozent,
+	min(Student_in_Veranstaltung2.Note) as "Beste Note"
+from
+	Student_in_Veranstaltung2 join Veranstaltungen2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+group by
+	Student_in_Veranstaltung2.Veranstaltung,
+	Veranstaltungen2.Dozent
+
+--schlechteste Note eines Dozenten zu jeder Veranstaltung
+select 
+	Student_in_Veranstaltung2.Veranstaltung,
+	Veranstaltungen2.Dozent,
+	max(Student_in_Veranstaltung2.Note) as "Schlechteste Note"
+from
+	Student_in_Veranstaltung2 join Veranstaltungen2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+group by
+	Student_in_Veranstaltung2.Veranstaltung,
+	Veranstaltungen2.Dozent
+
+--Anzahl der Studenten zu jeder Veranstaltung
+select
+	Student_in_Veranstaltung2.Veranstaltung,
+	Veranstaltungen2.Dozent,
+	count(distinct Student_in_Veranstaltung2.Student) as "Anzahl Studenten"
+from
+	Student_in_Veranstaltung2 join Veranstaltungen2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+group by
+	Student_in_Veranstaltung2.Veranstaltung,
+	Veranstaltungen2.Dozent
+
+/************************************************/
+/* de-init										*/	
+/************************************************/
 drop table Student_in_Veranstaltung2;
 drop table Veranstaltungen2;
 drop table Dozenten2;
