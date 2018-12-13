@@ -143,6 +143,24 @@ group by
 	Student_in_Veranstaltung2.Veranstaltung,
 	Veranstaltungen2.Dozent
 
+--durchschnittliche Anzahl an Studenten zu jeder Veranstaltung
+select
+	Anz.Dozent,
+	avg(Anz.Anz_Studenten) as "Durchschnittliche Anzahl"
+from (	
+	select
+		Student_in_Veranstaltung2.Veranstaltung,
+		Veranstaltungen2.Dozent,
+		cast(count(distinct Student_in_Veranstaltung2.Student) as real) as Anz_Studenten
+	from
+		Student_in_Veranstaltung2 join Veranstaltungen2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+	group by
+		Student_in_Veranstaltung2.Veranstaltung,
+		Veranstaltungen2.Dozent
+) as Anz
+group by
+	Anz.Dozent
+
 /************************************************/
 /* de-init										*/	
 /************************************************/
