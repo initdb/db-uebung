@@ -162,6 +162,35 @@ group by
 	Anz.Dozent
 
 /************************************************/
+/* Joins										*/	
+/************************************************/
+--Liste aller Veranstaltungen eines Dozenten mit keinen Studenten
+select
+	Veranstaltungen2.Name as "Veranstaltung ohne Studenten",
+	Veranstaltungen2.Dozent
+from
+	--rechte Tabelle bleibt komplett erhalten
+	Student_in_Veranstaltung2 right join Veranstaltungen2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+where
+	Student_in_Veranstaltung2.Student is null
+
+--Liste aller Studenten und zusätzlich Informtionen zur besuchten Veranstaltung
+select 
+	Student_in_Veranstaltung2.Student,
+	Veranstaltungen2.*
+from
+	--linke Tabelle bleibt komplett erhalten
+	Student_in_Veranstaltung2 left join Veranstaltungen2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+
+--right join vriante der vorherigen Aufgabe
+select 
+	Student_in_Veranstaltung2.Student,
+	Veranstaltungen2.*
+from
+	--linke Tabelle bleibt komplett erhalten
+	Veranstaltungen2 right join Student_in_Veranstaltung2 on Student_in_Veranstaltung2.Veranstaltung = Veranstaltungen2.Name
+
+/************************************************/
 /* de-init										*/	
 /************************************************/
 drop table Student_in_Veranstaltung2;
