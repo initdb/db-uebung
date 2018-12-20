@@ -8,7 +8,7 @@ create table Stud(
 	Matrikel decimal(4,0),
 	Geburtstag date,
 	primary key (Matrikel),
-	constraint matrikel_nicht_negativ check(Matrikel>=0)
+	constraint matrikel_nicht_nega check(Matrikel>=0)
 );
 create table Doz(
 	Name varchar(30),
@@ -22,42 +22,42 @@ create table Veranstalt(
 	Raum varchar (8),
 	Dozent varchar (30),
 	primary key (Name, Semester),
-	foreign key (Dozent) references Dozenten(Name)
+	foreign key (Dozent) references Doz(Name)
 );
 create table Stud_in_Veranstaltung(
 	Student decimal(4,0),
 	Veranstaltung varchar(30),
 	Semester char(4),
 	Note Decimal(2,1),
-	foreign key (Student) references Studenten(Matrikel),
-	foreign key (Veranstaltung, Semester) references Veranstaltungen(Name,Semester),
-	constraint schulnote check(Note >= 1 and Note<=5),
+	foreign key (Student) references Stud(Matrikel),
+	foreign key (Veranstaltung, Semester) references Veranstalt(Name,Semester),
+	constraint schulnot check(Note >= 1 and Note<=5),
 	primary key (Student, Veranstaltung, Semester)
 );
 
-insert into Dozenten (Name, Tel, Buero) values ('Klaus', '123', 'C201');
-insert into Veranstaltungen (Dozent, Name, Raum, Semester) values 
+insert into Doz (Name, Tel, Buero) values ('Klaus', '123', 'C201');
+insert into Veranstalt (Dozent, Name, Raum, Semester) values 
 	('Klaus','Tanzgymnastik','D111','ss18'),
 	('Klaus','Tanzgymnastik','D111','ws17'),
 	('Klaus','Sackhüpfen',null,'ws17');
 
-insert into Dozenten (Name, Buero) values ('Maria', 'D120');
-insert into Veranstaltungen (Dozent, Name, Raum, Semester) values 
+insert into Doz (Name, Buero) values ('Maria', 'D120');
+insert into Veranstalt (Dozent, Name, Raum, Semester) values 
 	('Maria','Drachenfliegen','Strand','ss17'),
 	('Maria','Drachenfliegen','Strand','ss18'),
 	('Maria','Beachvolleyball','Strand','ss17'),
 	('Maria','Beachvolleyball','Strand','ss18');
 
-insert into Dozenten (Name, Buero) values ('Sepp', 'D10');
+insert into Doz (Name, Buero) values ('Sepp', 'D10');
 
-insert into Studenten (Name, Matrikel, Geburtstag) values 
+insert into Stud (Name, Matrikel, Geburtstag) values 
 	('Eva',3333,'1990-03-01'),
 	('Luise',3334,'1990-06-02'),
 	('Daniel',3335,'1990-07-01'),
 	('Sepp',3331,'1993-02-01'),
 	('Dominik',3336,'1990-08-01');
 
-insert into Student_in_Veranstaltung (Student, Veranstaltung, Semester, Note) values 
+insert into Stud_in_Veranstaltung (Student, Veranstaltung, Semester, Note) values 
 	(3333,'Beachvolleyball','ss18',1.0),
 	(3334,'Beachvolleyball','ss18',2.2),
 	(3335,'Beachvolleyball','ss18',2.4),
@@ -83,7 +83,7 @@ create table Ahn
 /************************************************/
 /* insert data									*/	
 /************************************************/
-insert into Ahnen (Name, Vater, Mutter) values 
+insert into Ahn (Name, Vater, Mutter) values 
 	('Adam',null,null), 
 	('Eva',null,null) ,
 	('Kain','Adam','Eva') ,
@@ -109,6 +109,37 @@ insert into Ahnen (Name, Vater, Mutter) values
 /************************************************/
 /* functions									*/	
 /************************************************/
+go
+create function getMed()
+returns decimal(2,1) as
+begin
+	declare @top_med int; set @top_med = 0;
+	declare @bottom_med int; set @bottom_med = 0;
+	declare @med decimal(2,1); set @med = 0;
+	declare @anz int; set @anz=(select count(*) from Stud_in_Veranstaltung);
+	declare @tmp_anz int; set @tmp_anz = 0;
+
+	declare cur scroll cursor for
+		select Note from Stud_in_Veranstaltung
+	open cur
+	set @tmp_anz = round((@anz / 2), 0)
+	fetch absolute @tmp_anz from cur into @bottom_med
+	set @tmp_anz = round((@anz / 2), 1)
+	fetch absolute @tmp_anz from cur into @top_med
+	close cur;
+	deallocate cur;
+	
+	set @med = (@top_med + @bottom_med) / 2
+
+	return @med;
+end;
+
+
+select dbo.getMed() as Median
+
+go
+drop function getMed;
+go
 
 /************************************************/
 /* clean up										*/	
