@@ -1,19 +1,19 @@
 --use Vorlesung_DB;
 
-create table Studenten(
+create table Stud(
 	Name varchar(30),
 	Matrikel decimal(4,0),
 	Geburtstag date,
 	primary key (Matrikel),
 	constraint matrikel_nicht_negativ check(Matrikel>=0)
 );
-create table Dozenten(
+create table Doz(
 	Name varchar(30),
 	Buero varchar(30) not null,
 	Tel varchar(30),
 	primary key(Name)
 );
-create table Veranstaltungen(
+create table Veranstalt(
 	Name varchar (30),
 	Semester char(4),
 	Raum varchar (8),
@@ -21,7 +21,7 @@ create table Veranstaltungen(
 	primary key (Name, Semester),
 	foreign key (Dozent) references Dozenten(Name)
 );
-create table Student_in_Veranstaltung(
+create table Stud_in_Veranstaltung(
 	Student decimal(4,0),
 	Veranstaltung varchar(30),
 	Semester char(4),
@@ -67,7 +67,7 @@ insert into Student_in_Veranstaltung (Student, Veranstaltung, Semester, Note) va
 	(3334,'Beachvolleyball','ss17',1.2),
 	(3335,'Beachvolleyball','ss17',1.3);
 	
-create table Ahnen 
+create table Ahn 
 (
 	Name varchar(50) not null,
 	Vater varchar(50),
@@ -100,8 +100,8 @@ insert into Ahnen (Name, Vater, Mutter) values
 	('Maria',null,null) ,
 	('Jesus','Josef','Maria');
 	
-drop table Student_in_Veranstaltung;
-drop table Veranstaltungen;
-drop table Dozenten;
-drop table Studenten;
-drop table Ahnen;
+drop table Stud_in_Veranstaltung;
+drop table Veranstalt;
+drop table Doz;
+drop table Stud;
+drop table Ahn;
