@@ -1,5 +1,8 @@
 --use Vorlesung_DB;
 
+/************************************************/
+/* create tables								*/	
+/************************************************/
 create table Stud(
 	Name varchar(30),
 	Matrikel decimal(4,0),
@@ -77,6 +80,9 @@ create table Ahn
 	foreign key (Mutter) references Ahnen(Name)
 )
 
+/************************************************/
+/* insert data									*/	
+/************************************************/
 insert into Ahnen (Name, Vater, Mutter) values 
 	('Adam',null,null), 
 	('Eva',null,null) ,
@@ -99,7 +105,14 @@ insert into Ahnen (Name, Vater, Mutter) values
 	('Josef','Jakob',null) ,
 	('Maria',null,null) ,
 	('Jesus','Josef','Maria');
-	
+
+/************************************************/
+/* functions									*/	
+/************************************************/
+
+/************************************************/
+/* clean up										*/	
+/************************************************/	
 drop table Stud_in_Veranstaltung;
 drop table Veranstalt;
 drop table Doz;
