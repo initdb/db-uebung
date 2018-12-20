@@ -107,24 +107,66 @@ insert into Ahn (Name, Vater, Mutter) values
 	('Jesus','Josef','Maria');
 
 /************************************************/
-/* functions									*/	
+/* function get median							*/	
 /************************************************/
 go
 create function getMed()
 returns decimal(2,1) as
 begin
-	declare @top_med int; set @top_med = 0;
-	declare @bottom_med int; set @bottom_med = 0;
+	declare @top_med decimal(2,1); set @top_med = 0;
+	declare @bottom_med decimal(2,1); set @bottom_med = 0;
 	declare @med decimal(2,1); set @med = 0;
-	declare @anz int; set @anz=(select count(*) from Stud_in_Veranstaltung);
+	declare @anz int; set @anz=(select count(*) from Stud_in_Veranstaltung) + 1;
 	declare @tmp_anz int; set @tmp_anz = 0;
 
 	declare cur scroll cursor for
-		select Note from Stud_in_Veranstaltung
+		select Note from Stud_in_Veranstaltung order by Note
 	open cur
-	set @tmp_anz = round((@anz / 2), 0)
+	set @tmp_anz = floor(cast(@anz as float) / 2)
 	fetch absolute @tmp_anz from cur into @bottom_med
-	set @tmp_anz = round((@anz / 2), 1)
+	set @tmp_anz = ceiling(cast(@anz as float) / 2)
+	fetch absolute @tmp_anz from cur into @top_med
+	close cur;
+	deallocate cur;
+	
+	set @med = ( @top_med + @bottom_med ) / 2
+
+	return @top_med;
+end;
+go
+drop function getMed;
+go
+
+select * from Stud_in_Veranstaltung order by Note
+select dbo.getMed() as Median
+
+/************************************************/
+/* function get median from Veranstaltung		*/	
+/************************************************/
+go
+create function getMedFromVer(@Veranstaltung varchar(30))
+returns float as
+begin
+	declare @top_med float; set @top_med = 0;
+	declare @bottom_med float; set @bottom_med = 0;
+	declare @med float; set @med = 0;
+	declare @anz int; set @anz=(
+		select count(*)
+		from Stud_in_Veranstaltung
+		where Stud_in_Veranstaltung.Veranstaltung like @Veranstaltung
+		);
+	set @anz = @anz + 1;
+	declare @tmp_anz int; set @tmp_anz = 0;
+
+	declare cur scroll cursor for
+		select Note
+		from Stud_in_Veranstaltung
+		where Stud_in_Veranstaltung.Veranstaltung like @Veranstaltung
+		order by Note
+	open cur
+	set @tmp_anz = floor(cast(@anz as float) / 2)
+	fetch absolute @tmp_anz from cur into @bottom_med
+	set @tmp_anz = ceiling(cast(@anz as float) / 2)
 	fetch absolute @tmp_anz from cur into @top_med
 	close cur;
 	deallocate cur;
@@ -133,13 +175,12 @@ begin
 
 	return @med;
 end;
-
-
-select dbo.getMed() as Median
-
 go
-drop function getMed;
+drop function getMedFromVer;
 go
+
+select * from Stud_in_Veranstaltung where Stud_in_Veranstaltung.Veranstaltung like 'Tanzgymnastik' order by Note
+select dbo.getMedFromVer('Tanzgymnastik') as Median
 
 /************************************************/
 /* clean up										*/	
