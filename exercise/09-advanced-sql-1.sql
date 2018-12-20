@@ -196,12 +196,25 @@ order by Veranstaltungen2.Name
 /* Rekursion									*/	
 /************************************************/
 --Liste mit Name einer Person und Vorfahren
---select 
---	A.Name,
---	P.Name as Ahne
---from
---	Ahnen2 as A join Ahnen2 as P on A.Vater = P.Name or A.Mutter = P.Name
+select 
+	A.Name,
+	P.Name as Ahne
+from
+	Ahnen2 as A join Ahnen2 as P on A.Vater = P.Name or A.Mutter = P.Name
+--Verwandschaftsverhältnisse
+select 
+	A.Name,
+	P.Name as ersterVorfahre
+from
+	Ahnen2 as A join Ahnen2 as P on A.Vater = P.Name or A.Mutter = P.Name
 
+	union
+
+select 
+from
+
+
+--Rekursion
 with Verwandschaft(Person, Ahne) as (
 	select
 		A.Name,
