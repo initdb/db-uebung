@@ -36,7 +36,7 @@ insert into Dozenten (Name, Tel, Buero) values ('Klaus', '123', 'C201');
 insert into Veranstaltungen (Dozent, Name, Raum, Semester) values 
 	('Klaus','Tanzgymnastik','D111','ss18'),
 	('Klaus','Tanzgymnastik','D111','ws17'),
-	('Klaus','Sackh�pfen',null,'ws17');
+	('Klaus','Sackh�pfen',null,'ws17');
 
 insert into Dozenten (Name, Buero) values ('Maria', 'D120');
 insert into Veranstaltungen (Dozent, Name, Raum, Semester) values 
@@ -100,6 +100,30 @@ insert into Ahnen (Name, Vater, Mutter) values
 	('Maria',null,null) ,
 	('Jesus','Josef','Maria');
 	
+/************************************************/
+/* 10.1 Division: Nutzen Sie die Division, um 	*/
+/* alle Veranstaltungen auszugeben, die von 	*/
+/* allen Studenten besucht wurde				*/	
+/************************************************/
+--I.	wähle alle möglichen Lösungskanidaten aus
+select SinV.Veranstaltung, SinV.Semester
+from Student_in_Veranstaltung as SinV
+	except
+--II.	generieren aller Möglichen Kombinationen von "Zähler und Nenner"
+select 
+		Unvollstaendig.Veranstaltung,  
+		Unvollstaendig.Semester
+from(
+		select	
+			AlleMoeglichenBewertungen.Veranstaltung,
+			AlleMoeglichenBewertungen.Semester,
+			Studenten.Matrikel 
+		from (select veranstaltung, semester from Student_in_Veranstaltung) as AlleMoeglichenBewertungen, Studenten
+--III:	ziehe von (II) die tatsächlichen ab
+			except 	
+		select Veranstaltung, Semester, Student from Student_in_Veranstaltung
+) as Unvollstaendig
+
 drop table Student_in_Veranstaltung;
 drop table Veranstaltungen;
 drop table Dozenten;
