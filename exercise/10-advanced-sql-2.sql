@@ -26,7 +26,8 @@ create table Student_in_Veranstaltung(
 	Veranstaltung varchar(30),
 	Semester char(4),
 	Note Decimal(2,1),
-	foreign key (Student) references Studenten(Matrikel),
+	-- L�sung f�r Aufgabe 10.2
+	foreign key (Student) references Studenten(Matrikel) on delete cascade,
 	foreign key (Veranstaltung, Semester) references Veranstaltungen(Name,Semester),
 	constraint schulnote check(Note >= 1 and Note<=5),
 	primary key (Student, Veranstaltung, Semester)
